@@ -7,7 +7,9 @@ import org.junit.Test;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 public class StreamSpec {
 
@@ -16,6 +18,10 @@ public class StreamSpec {
             new Employee(2, "Patricio", 300_000.0, TypeEmployee.SLAVE),
             new Employee(3, "Lucas", 400_000.0, TypeEmployee.MASTER)
     };
+
+    private static void accept(Employee employee) {
+        employee.increment(0.1);
+    }
 
     @Test
     public void max_list_employee_by_salary() {
@@ -111,6 +117,21 @@ public class StreamSpec {
 
         assertEquals(partitionList.get(TypeEmployee.SLAVE).size(), 2);
         assertEquals(partitionList.get(TypeEmployee.MASTER).size(), 1);
+    }
+
+
+    @Test
+    public void increase_salary_10_percentage_all_employee() {
+        List<Employee> employees = Arrays.stream(listEmployee)
+                .map(employee -> employee.increment(0.1))
+                .collect(Collectors.toList());
+
+        assertThat(employees, contains(
+                        hasProperty("salary", equalTo(220_000.0)),
+                        hasProperty("salary", equalTo(330_000.0)),
+                        hasProperty("salary", equalTo(440_000.0))
+                )
+        );
     }
 
 }

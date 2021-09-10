@@ -7,9 +7,14 @@ import lombok.Getter;
 @Getter
 public class Employee {
 
-    private final int id;
-    private final String name;
-    private final double salary;
-    private final TypeEmployee typeEmployee;
+    private int id;
+    private String name;
+    private double salary;
+    private TypeEmployee typeEmployee;
+
+    public Employee increment(double percentage) {
+        this.salary += this.salary * percentage;
+        return this;
+    }
 
 }

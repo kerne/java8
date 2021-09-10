@@ -1,4 +1,4 @@
-package cl.poc.concurrent.semaphore;
+package cl.poc.excercises;
 
 import cl.poc.domain.Employee;
 import cl.poc.domain.TypeEmployee;

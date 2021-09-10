@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="cl.poc.concurrent.semaphore.LoginSemaphoreSpec" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-07-29T20:10:50" hostname="LAPTOP-GI770PPJ" time="0.011">
+  <properties/>
+  <testcase name="when_logout_then_available_slots" classname="cl.poc.concurrent.semaphore.LoginSemaphoreSpec" time="0.011"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

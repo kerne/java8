@@ -1,12 +1,10 @@
 package cl.poc.concurrent.semaphore;
 
 import cl.poc.domain.Employee;
+import cl.poc.domain.TypeEmployee;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.DoubleSummaryStatistics;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
@@ -14,9 +12,9 @@ import static org.junit.Assert.assertEquals;
 public class StreamSpec {
 
     Employee[] listEmployee = {
-            new Employee(1, "Cesar", 200_000.0),
-            new Employee(2, "Patricio", 300_000.0),
-            new Employee(3, "Lucas", 400_000.0)
+            new Employee(1, "Cesar", 200_000.0, TypeEmployee.SLAVE),
+            new Employee(2, "Patricio", 300_000.0, TypeEmployee.SLAVE),
+            new Employee(3, "Lucas", 400_000.0, TypeEmployee.MASTER)
     };
 
     @Test
@@ -82,9 +80,37 @@ public class StreamSpec {
         assertEquals(doubleSummaryStatistics.getMax(), 400_000, 0);
         assertEquals(doubleSummaryStatistics.getAverage(), 300_000, 0);
         assertEquals(doubleSummaryStatistics.getSum(), 900_000, 0);
-
-
     }
 
+    @Test
+    public void partition_employee() {
+        Map<Boolean, List<Employee>> partitionList = Arrays.stream(listEmployee)
+                .collect(Collectors.partitioningBy(employee -> employee.getId() < 2));
+
+        assertEquals(partitionList.get(true).size(), 1);
+        assertEquals(partitionList.get(false).size(), 2);
+    }
+
+    @Test
+    public void grouping_by_first_letter_of_employee() {
+        Map<Character, List<Employee>> partitionList =
+                Arrays
+                        .stream(listEmployee)
+                        .collect(Collectors.groupingBy(employee -> employee.getName().charAt(0)));
+
+        assertEquals(partitionList.get('C').get(0).getName(), "Cesar");
+        assertEquals(partitionList.get('P').get(0).getName(), "Patricio");
+        assertEquals(partitionList.get('L').get(0).getName(), "Lucas");
+    }
+
+    @Test
+    public void grouping_by_type_of_employee() {
+        Map<TypeEmployee, List<Employee>> partitionList = Arrays
+                .stream(listEmployee)
+                .collect(Collectors.groupingBy(Employee::getTypeEmployee));
+
+        assertEquals(partitionList.get(TypeEmployee.SLAVE).size(), 2);
+        assertEquals(partitionList.get(TypeEmployee.MASTER).size(), 1);
+    }
 
 }

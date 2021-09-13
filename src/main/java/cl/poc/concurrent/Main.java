@@ -1,9 +1,9 @@
 package cl.poc.concurrent;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.*;
-import java.util.stream.Collectors;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Main {
 
@@ -51,14 +51,6 @@ class Square {
         return this.number * this.number;
     }
 
-    public Integer getNumber() {
-        return number;
-    }
-
-    public void setNumber(Integer number) {
-        this.number = number;
-    }
-
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("Square{");
@@ -84,7 +76,7 @@ class SquareTask implements Runnable {
     @Override
     public void run() {
         try {
-            System.out.printf("Calculate %d%n " ,  n1.calculate());
+            System.out.printf("Calculate %d%n ", n1.calculate());
             cyclicBarrier.await();
         } catch (InterruptedException | BrokenBarrierException e) {
             e.printStackTrace();

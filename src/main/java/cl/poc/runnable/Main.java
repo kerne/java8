@@ -1,28 +1,46 @@
 package cl.poc.runnable;
 
-import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicInteger;
+import lombok.SneakyThrows;
 
 public class Main {
 
     public static void main(String[] args) {
 
+        Counter counter = new Counter();
 
-        Thread thread1 = new Thread(new Counter());
-        Thread thread2 = new Thread(new Counter());
-        Thread thread3 = new Thread(new Counter());
+        Thread thread = new Thread(counter);
 
-        Arrays.asList(thread1, thread2, thread3).stream().forEach(e -> e.start());
+        thread.start();
+
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        counter.doStop();
     }
 }
 
 
 class Counter implements Runnable {
 
-    private static AtomicInteger counter = new AtomicInteger(3);
+    private boolean doStop;
 
+    @SneakyThrows
     @Override
     public void run() {
-        System.out.println(counter.getAndDecrement());
+        System.out.printf("Thread %s%n", Thread.currentThread().getName());
+        while (keepRunning()) {
+            System.out.print(String.join(".", "."));
+            Thread.sleep(500);
+        }
+    }
+
+    public synchronized void doStop() {
+        this.doStop = true;
+    }
+
+    private synchronized boolean keepRunning() {
+        return !this.doStop;
     }
 }

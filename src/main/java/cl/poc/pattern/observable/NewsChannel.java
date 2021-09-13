@@ -10,7 +10,7 @@ public class NewsChannel implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         this.setNews((String)arg);
-        System.out.println(arg);
+        System.out.println(news);
     }
 
     public void setNews(String news) {
